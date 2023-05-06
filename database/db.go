@@ -1,7 +1,7 @@
 package database
 
 import (
-	"github.com/go-jaguar/jaguar/config"
+	"github.com/gojaguar/jaguar/config"
 	"gorm.io/driver/mysql"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"

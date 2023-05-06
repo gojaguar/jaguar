@@ -1,4 +1,4 @@
-module github.com/go-jaguar/jaguar
+module github.com/gojaguar/jaguar
 
 go 1.19
 

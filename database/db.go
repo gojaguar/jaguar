@@ -11,6 +11,8 @@ import (
 )
 
 var (
+	// ErrInvalidDialect is returned when an invalid or unsupported dialect is provided when setting up a database
+	// connection.
 	ErrInvalidDialect = errors.New("an invalid or unsupported dialect was provided")
 )
 

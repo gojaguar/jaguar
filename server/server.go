@@ -17,7 +17,7 @@ import (
 // to build web servers according to their needs.
 type Builder struct {
 	router         chi.Router
-	routes         map[string]Controller
+	controllers    []Controller
 	middlewares    []func(handler http.Handler) http.Handler
 	signals        []os.Signal
 	signalsChannel chan os.Signal
@@ -41,11 +41,11 @@ func (builder *Builder) Build() *Server {
 
 // buildRoutes is an internal method that processes all the routes before the final build call.
 func (builder *Builder) buildRoutes() {
-	if len(builder.routes) == 0 {
-		builder.routes = defaultRoutes()
+	if len(builder.controllers) == 0 {
+		builder.controllers = defaultRoutes()
 	}
-	for path, ctrl := range builder.routes {
-		builder.router.Mount(path, ctrl)
+	for _, ctrl := range builder.controllers {
+		builder.router.Mount(ctrl.Namespace(), ctrl)
 	}
 }
 
@@ -68,10 +68,10 @@ func (builder *Builder) buildSignals() {
 	signal.Notify(builder.signalsChannel, builder.signals...)
 }
 
-// Routes allows the developer to specify a route or a set of routes that fulfill the Controller interface.
+// Controller allows the developer to specify a route or a set of routes that fulfill the Controller interface.
 // This method allows multiple calls.
-func (builder *Builder) Routes(path string, ctrl Controller) *Builder {
-	builder.routes[path] = ctrl
+func (builder *Builder) Controller(ctrl Controller) *Builder {
+	builder.controllers = append(builder.controllers, ctrl)
 	return builder
 }
 
@@ -122,15 +122,30 @@ func (builder *Builder) buildHTTP() *http.Server {
 	}
 }
 
+// Controller groups a set of routes in a certain namespace.
+//
+//	The 'users' namespace can contain the following routes:
+//	- GET /users/1
+//	- POST /users
+//	- PUT /users/1
+//	- DELETE /users/1
 type Controller interface {
 	http.Handler
+	// Namespace determines the route prefix used to expose the current controller.
+	// For the users service, the namespace is users, giving the following route structure:
+	// <namespace>/:id
+	Namespace() string
 }
 
+// Server is used to listen to incoming HTTP requests until an OS signal is triggered.
 type Server struct {
+	// http contains a handler to the HTTP Server listening to incoming HTTP requests.
 	http *http.Server
+	// sigs contains the OS signals used to Shutdown the Server.
 	sigs chan os.Signal
 }
 
+// ListenAndServe listens for incoming HTTP requests until an error occurs.
 func (s *Server) ListenAndServe() error {
 	errs := make(chan error, 1)
 
@@ -153,6 +168,8 @@ func (s *Server) ListenAndServe() error {
 	return err
 }
 
+// Shutdown attempts to shut down the current server until a timeout of a minute occurs.
+// Calling Shutdown allows the web server to process pending HTTP requests.
 func (s *Server) Shutdown() {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
 	if err := s.http.Shutdown(ctx); err != nil {
@@ -161,17 +178,34 @@ func (s *Server) Shutdown() {
 	cancel()
 }
 
-func defaultRoutes() map[string]Controller {
-	return map[string]Controller{
-		"/": http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			w.WriteHeader(http.StatusOK)
-			if _, err := w.Write([]byte("OK")); err != nil {
-				http.Error(w, "Failed to write response", http.StatusInternalServerError)
-			}
-		}),
+// defaultRoutes returns a set of default routes.
+func defaultRoutes() []Controller {
+	return []Controller{
+		namespacedHandlerFunc{
+			namespace: "",
+			HandlerFunc: http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				w.WriteHeader(http.StatusOK)
+				if _, err := w.Write([]byte("OK")); err != nil {
+					http.Error(w, "Failed to write response", http.StatusInternalServerError)
+				}
+			}),
+		},
 	}
 }
 
+// namespacedHandlerFunc is used to expose an http.HandlerFunc in a certain namespace.
+type namespacedHandlerFunc struct {
+	namespace string
+	http.HandlerFunc
+}
+
+// Namespace returns the namespace of the current http.HandlerFunc
+func (p namespacedHandlerFunc) Namespace() string {
+	return p.namespace
+}
+
+// defaultMiddlewares returns the middlewares that should use by default when initializing an HTTP server if no middlewares
+// were provided.
 func defaultMiddlewares() []func(handler http.Handler) http.Handler {
 	return []func(handler http.Handler) http.Handler{
 		middleware.RequestID,

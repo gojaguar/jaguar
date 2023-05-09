@@ -3,7 +3,6 @@ module github.com/gojaguar/jaguar
 go 1.19
 
 require (
-	github.com/go-chi/chi/v5 v5.0.8
 	gorm.io/driver/mysql v1.5.0
 	gorm.io/driver/postgres v1.5.0
 	gorm.io/driver/sqlite v1.5.0

@@ -6,7 +6,7 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/gojaguar/jaguar)](https://goreportcard.com/report/github.com/gojaguar/jaguar)
 [![Sourcegraph](https://sourcegraph.com/github.com/gojaguar/jaguar/-/badge.svg)](https://sourcegraph.com/github.com/gojaguar/jaguar?badge)
 
-Jaguar is an open source library/toolkit written in [Go](https://go.dev/) for creating scalable web servers. It's main
+Jaguar is an open source library/toolkit written in [Go](https://go.dev/) for creating scalable web servers. Its main
 goal is to solve common design problems that can be found when writing web servers in Go. This library provides
 developers a clean and easy-to-use API to initialize, configure and extend web services and third party applications.
 

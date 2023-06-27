@@ -18,6 +18,11 @@ type localCacheRepository[T any] struct {
 	keepAlive  time.Duration
 }
 
+func (c *localCacheRepository[T]) Create(ctx context.Context, input T) (T, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
 func (c *localCacheRepository[T]) Find(ctx context.Context, query Query) ([]T, error) {
 	c.lock.Lock()
 	defer c.lock.Unlock()
@@ -42,7 +47,23 @@ func (c *localCacheRepository[T]) Find(ctx context.Context, query Query) ([]T, e
 	return response, nil
 }
 
-func NewLocalCacheRepository[T any](r Repository[T], keepAlive time.Duration) Repository[T] {
+func (c *localCacheRepository[T]) Get(ctx context.Context, query Query) (T, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (c *localCacheRepository[T]) Update(ctx context.Context, query Query, data T) (T, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (c *localCacheRepository[T]) Delete(ctx context.Context, query Query) (T, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+// WithLocalCache wraps a Repository with a key-value cache using a go map.
+func WithLocalCache[T any](r Repository[T], keepAlive time.Duration) Repository[T] {
 	return &localCacheRepository[T]{
 		repository: r,
 		keepAlive:  keepAlive,

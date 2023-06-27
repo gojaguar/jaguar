@@ -18,6 +18,9 @@ func (p Page) Limit() int {
 	if p.Size < 1 {
 		return 1
 	}
+	if p.Size == 0 {
+		return 100
+	}
 	return p.Size
 }
 
@@ -39,9 +42,9 @@ type OrderBy struct {
 
 // SQL converts the current OrderBy to a SQL expression.
 func (o OrderBy) SQL() string {
-	order := "desc"
+	order := "DESC"
 	if !o.Desc {
-		order = "asc"
+		order = "ASC"
 	}
 	query := fmt.Sprintf("%s %s", o.Column, order)
 	return query

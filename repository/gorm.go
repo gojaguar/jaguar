@@ -9,6 +9,11 @@ type gormRepository[T any] struct {
 	db *gorm.DB
 }
 
+func (g *gormRepository[T]) Create(ctx context.Context, input T) (T, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
 func (g *gormRepository[T]) Find(ctx context.Context, query Query) ([]T, error) {
 	q := query.GORM(g.db)
 	var out []T
@@ -16,6 +21,21 @@ func (g *gormRepository[T]) Find(ctx context.Context, query Query) ([]T, error) 
 		return nil, err
 	}
 	return out, nil
+}
+
+func (g *gormRepository[T]) Get(ctx context.Context, query Query) (T, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (g *gormRepository[T]) Update(ctx context.Context, query Query, data T) (T, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (g *gormRepository[T]) Delete(ctx context.Context, query Query) (T, error) {
+	//TODO implement me
+	panic("implement me")
 }
 
 func (g gormRepository[T]) model() any {

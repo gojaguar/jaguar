@@ -10,6 +10,11 @@ type firestoreRepository[T any] struct {
 	client     *firestore.Client
 }
 
+func (f *firestoreRepository[T]) Create(ctx context.Context, input T) (T, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
 func (f *firestoreRepository[T]) Find(ctx context.Context, query Query) ([]T, error) {
 	ref := f.client.Collection(f.collection)
 	ref.Query = query.Firestore(ref.Query)
@@ -30,6 +35,21 @@ func (f *firestoreRepository[T]) Find(ctx context.Context, query Query) ([]T, er
 	}
 
 	return out, nil
+}
+
+func (f *firestoreRepository[T]) Get(ctx context.Context, query Query) (T, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (f *firestoreRepository[T]) Update(ctx context.Context, query Query, data T) (T, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (f *firestoreRepository[T]) Delete(ctx context.Context, query Query) (T, error) {
+	//TODO implement me
+	panic("implement me")
 }
 
 func NewRepositoryFirestore[T any](client *firestore.Client, collection string) Repository[T] {

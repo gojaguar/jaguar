@@ -25,7 +25,7 @@ developers a clean and easy-to-use API to initialize, configure and extend web s
 ## Getting started
 
 ```shell
-go get github.com/gojaguar/jaguar@v0.4.0
+go get github.com/gojaguar/jaguar@v0.5.0
 ```
 
 ## Disclaimer

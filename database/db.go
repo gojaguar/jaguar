@@ -24,7 +24,7 @@ func SetupConnectionSQL(cfg config.Database) (*gorm.DB, error) {
 	if dialect == nil {
 		return nil, fmt.Errorf("%w: %s", ErrInvalidDialect, cfg.Engine)
 	}
-	return gorm.Open(dialect(cfg.ToDNS()))
+	return gorm.Open(dialect(cfg.DSN()))
 }
 
 func dialector(eng string) func(dsn string) gorm.Dialector {

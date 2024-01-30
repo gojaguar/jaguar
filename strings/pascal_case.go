@@ -1,12 +1,13 @@
 // Copyright 2010 The Go Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
+// The original CamelCase was adapted to PascalCase.
 
 // Package strings implements simple functions to manipulate UTF-8 encoded strings that are not included in the
 // standard library package.
 package strings
 
-// CamelCase returns the CamelCased name.
+// PascalCase returns the PascalCased name.
 // If there is an interior underscore followed by a lower case letter,
 // drop the underscore and convert the letter to upper case.
 // There is a remote possibility of this rewrite causing a name collision,
@@ -14,7 +15,7 @@ package strings
 // C++ generator lowercases names, it's extremely unlikely to have two fields
 // with different capitalizations.
 // In short, _my_field_name_2 becomes XMyFieldName_2.
-func CamelCase(s string) string {
+func PascalCase(s string) string {
 	if s == "" {
 		return ""
 	}
@@ -51,14 +52,4 @@ func CamelCase(s string) string {
 		}
 	}
 	return string(t)
-}
-
-// Is c an ASCII lower-case letter?
-func isASCIILower(c byte) bool {
-	return 'a' <= c && c <= 'z'
-}
-
-// Is c an ASCII digit?
-func isASCIIDigit(c byte) bool {
-	return '0' <= c && c <= '9'
 }

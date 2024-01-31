@@ -152,5 +152,7 @@ func (s *SQLTestSuite) TestCreateBulk() {
 	s.Assert().NotEmpty(created)
 	s.Assert().Len(created, 3)
 
-	s.repository.Find(context.Background(), []uint{1, 2, 3})
+	res, err := s.repository.Find(context.Background(), []uint{1, 2, 3})
+	s.Assert().NoError(err)
+	s.Assert().Len(res, 3)
 }

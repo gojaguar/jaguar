@@ -15,17 +15,19 @@ developers a clean and easy-to-use API to initialize, configure and extend web s
 - Configuration
 - Database
 - Repository
-- HTTP servers
-- gRPC servers
-- Telemetry
+- HTTP servers 🔜
+- gRPC servers 🔜
+- Telemetry 🔜
     - Logging
     - Tracing
     - Monitoring
+- Utilities
+  - String manipulation
 
 ## Getting started
 
 ```shell
-go get github.com/gojaguar/jaguar@v0.5.0
+go get github.com/gojaguar/jaguar@v0.6.0
 ```
 
 ## Disclaimer

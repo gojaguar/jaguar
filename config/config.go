@@ -30,8 +30,14 @@ type Database struct {
 	Charset  string `json:"charset" env:"CHARSET" envDefault:"utf8mb4"`
 }
 
-// ToDNS converts the current database config to a Data Source Name string, usually used to connect to a database.
-func (d Database) ToDNS() string {
+// DataSourceName holds a method to return the data source name that allows establishing a connection with a database.
+type DataSourceName interface {
+	// DSN returns the data source name as a string.
+	DSN() string
+}
+
+// DSN converts the current database config to a Data Source Name string, usually used to connect to a database.
+func (d Database) DSN() string {
 	switch d.Engine {
 	case EngineMySQL:
 		return fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=%s&parseTime=True&loc=Local", d.User, d.Password, d.Host, d.Port, d.Name, d.Charset)

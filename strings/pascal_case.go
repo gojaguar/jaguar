@@ -26,10 +26,17 @@ func PascalCase(s string) string {
 		t = append(t, 'X')
 		i++
 	}
-	// Invariant: if the next letter is lower case, it must be converted
-	// to upper case.
-	// That is, we process a word at a time, where words are marked by _ or
-	// upper case letter. Digits are treated as words.
+	return string(append(t, lookupAndReplacePascalCaseWords(s, i)...))
+}
+
+// lookupAndReplacePascalCaseWords lookups for words in the string starting in position i
+// and replaces the snake case format to PascalCase.
+// Invariant: if the next letter is lower case, it must be converted
+// to upper case.
+// That is, we process a word at a time, where words are marked by _ or
+// upper case letter. Digits are treated as words.
+func lookupAndReplacePascalCaseWords(s string, i int) []byte {
+	t := make([]byte, 0, 32)
 	for ; i < len(s); i++ {
 		c := s[i]
 		if c == '_' && i+1 < len(s) && isASCIILower(s[i+1]) {
@@ -48,5 +55,5 @@ func PascalCase(s string) string {
 		// Accept lower case sequence that follows.
 		t, i = appendLowercaseSequence(s, i, t)
 	}
-	return string(t)
+	return t
 }
